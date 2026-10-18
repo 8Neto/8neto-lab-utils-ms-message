@@ -1,9 +1,10 @@
+import { telemetryLifecycle } from './otlp/telemetry.js';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { I18nValidationExceptionFilter } from 'nestjs-i18n';
 import { AppModule } from './app.module.js';
 import { DOCKER_PORT } from './config/index.js';
-import { telemetryLifecycle, TelemetryShutdown } from './otlp/index.js';
+import { TelemetryShutdown } from './otlp/telemetry-shutdown.js';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

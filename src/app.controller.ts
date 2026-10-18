@@ -8,6 +8,7 @@ export class AppController {
 
   @Get()
   health(): IResponse {
+    console.log('HEALTH-CONTROLLER');
     return this.appService.health();
   }
 }

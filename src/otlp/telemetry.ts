@@ -2,7 +2,8 @@ import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentation
 import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-proto';
 import { metrics, NodeSDK } from '@opentelemetry/sdk-node';
 import { GRAFANA_URL } from '../config/index.js';
-import { ConsoleMetricExporter } from './index.js';
+import { ConsoleMetricExporter } from './console-metric-exporter.js';
+import { installConsoleTrace } from './console-trace.js';
 
 // This module must load before Nest, Express and the HTTP client.
 process.env.OTEL_SERVICE_NAME ??= '8neto-lab-utils-ms-message';
@@ -37,6 +38,7 @@ const sdk = new NodeSDK({
   ],
 });
 sdk.start();
+installConsoleTrace();
 
 export const telemetryLifecycle = {
   async onApplicationShutdown(): Promise<void> {
