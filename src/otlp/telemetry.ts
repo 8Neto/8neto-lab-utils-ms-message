@@ -8,7 +8,8 @@ import { installConsoleTrace } from './console-trace.js';
 // This module must load before Nest, Express and the HTTP client.
 process.env.OTEL_SERVICE_NAME ??= '8neto-lab-utils-ms-message';
 process.env.OTEL_EXPORTER_OTLP_PROTOCOL ??= 'http/protobuf';
-process.env.OTEL_LOGS_EXPORTER ??= 'none';
+// NodeSDK creates a batched OTLP log exporter and flushes it on shutdown.
+process.env.OTEL_LOGS_EXPORTER ??= 'otlp';
 
 // GRAFANA_URL is the OTLP HTTP base URL, not the Grafana dashboard URL.
 if (GRAFANA_URL?.trim()) {
@@ -16,10 +17,10 @@ if (GRAFANA_URL?.trim()) {
   process.env.OTEL_EXPORTER_OTLP_ENDPOINT = endpoint;
   process.env.OTEL_EXPORTER_OTLP_TRACES_ENDPOINT = `${endpoint}/v1/traces`;
   process.env.OTEL_EXPORTER_OTLP_METRICS_ENDPOINT = `${endpoint}/v1/metrics`;
-  process.env.OTEL_EXPORTER_OTLP_LOGS_ENDPOINT = `${endpoint}/v1/logs`;
+  process.env.OTEL_EXPORTER_OTLP_LOGS_ENDPOINT ??= `${endpoint}/v1/logs`;
   process.env.OTEL_EXPORTER_OTLP_PROTOCOL = 'http/protobuf';
   process.env.OTEL_EXPORTER_OTLP_TRACES_PROTOCOL = 'http/protobuf';
-  process.env.OTEL_EXPORTER_OTLP_LOGS_PROTOCOL = 'http/protobuf';
+  process.env.OTEL_EXPORTER_OTLP_LOGS_PROTOCOL ??= 'http/protobuf';
 }
 
 const sdk = new NodeSDK({
